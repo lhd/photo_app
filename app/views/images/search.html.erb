@@ -1,0 +1,45 @@
+<h1> Search results </h1>
+
+<% if @accessible_images.size == 0 && @inaccessible_images.size == 0 %>
+	Sorry, no images found.
+<% elsif @accessible_images.size > 0 %>
+	Images in your own library:	
+	
+	<table>
+		<tr>
+			<th> Image title </th>
+			<th></th>
+		</tr>
+	<% @accessible_images.each do | img | %>
+		<tr>
+			<td> <%= link_to img.title, image_path(img)%> </td>
+			<td></td>
+		</tr>
+	<% end %>
+	</table>
+<br />
+<br />
+<% end %>
+<% if @inaccessible_images.size > 0 %>
+	These images were found, you currently don't have access to them though:
+
+	<table>
+		<tr>
+			<th> Image title </th>
+			<th></th>
+		</tr>
+	<% @inaccessible_images.each do | img | %>
+		<tr>
+			<td> <%= img.title %> </td>
+			<td> 
+				<%= form_for @share, :url => "/shares" do |f| %>
+					<%= render 'shared/error_messages', :object => f.object %>
+					<%= hidden_field_tag(:user_id, current_user.id) %>
+					<%= hidden_field_tag(:image_id, img.id) %>
+					<%= f.submit "Request access" %>
+				<% end %>
+			</td>
+		</tr>
+	<% end %>
+	</table>
+<% end %>

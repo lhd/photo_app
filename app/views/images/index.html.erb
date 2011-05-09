@@ -1,0 +1,60 @@
+<%= content_for :head do %>
+	<script type="text/javascript">
+		page = <%= @page %>;
+	</script>
+<% end %>
+
+<h1>Listing images</h1>
+
+<% if @images_first_row.size > 0 %>
+
+<div style="font-size=120%; margin-bottom: 10px;"> Don't like how the images are arranged? Reorder the images by using drag&amp;drop.</div>
+
+	
+<%= will_paginate %>
+<div style="clear:both"></div>
+
+	<br />
+
+	<div id="imagecontainer">	
+		<ul id="sortable">
+		<% @images_first_row.each do |image| %>
+			<li class="ui-state-default thumb" id="image_<%= image.id %>">
+				<a href="<%= image_path(image.id) %>"> <%= image_tag(image.file.thumb.url) if image.file.thumb.url %> </a>
+			</li>
+		<% end %>
+
+		<% if @images_second_row %>
+			<% @images_second_row.each do |image| %>
+				<li class="ui-state-default thumb" id="image_<%= image.id %>">
+					<a href="<%= image_path(image.id) %>">  <%= image_tag(image.file.thumb.url) if image.file.thumb.url %> </a>
+				</li>
+			<% end %>
+		<% end %>
+	
+		<% if @images_next_page.size > 0 %>
+			<div style="float:left; width:100%;"> Images on the next page: </div>
+		<% end %>
+		<% @images_next_page.each do |image| %>
+			<li class="ui-state-default thumb" id="image_<%= image.id %>">
+				<a href="<%= image_path(image.id) %>"> <%= image_tag(image.file.blended.url) if image.file.blended.url %> </a>
+			</li>
+		<% end %>
+		</ul>
+	</div>
+
+	<br />
+
+
+<div style="clear:both"></div>
+<%= will_paginate %>
+
+<% else %>
+
+You don't have access to any images. Upload your own or search for images and request access to them.
+
+<% end %>
+
+<br />
+
+<%= link_to 'back', :back %>

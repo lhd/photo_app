@@ -1,0 +1,36 @@
+	<header>
+        <div class="round" id="logo">
+			Sample Application for Uploading Images	
+        </div>
+        <nav class="round">
+          <ul>
+            <li><%= link_to "Home", root_path %></li>
+			
+			<% if signed_in? %>
+			<li><%= link_to "Profile", edit_user_path(current_user) %></li>
+			<li><%= link_to "Pictures", images_path %></li>
+			<li><%= link_to "Upload", upload_path %></li>	
+			<li><ul id="search">
+					<li> Search 
+						<ul class="children">
+							<li>
+							<form id="searchform" action="/search" method="post">		            
+								<input name="searchterm" id="searchterm" type="text" size="20" maxlength="30"/>							
+								<br />
+								<label id="imagelabel" for="searchimages"> Images </label> <input type="radio" name="searchtype" value="images" id="searchimages" checked="checked"/> 
+								<input type="radio" name="searchtype" value="users" id="searchusers"/> <label id="userlabel" for="searchimages"> Users </label>
+								<br />
+								<input type="submit" value=" Search "/>				
+							</form>
+							</li>
+				        </ul>
+					</li>
+				</ul>
+			<li><%= link_to "Friends", friendships_path %></li>
+			<li><%= link_to "Sign out", signout_path, :method => :delete %></li>
+			<% else %>
+			<li><%= link_to "Sign in", signin_path %></li>
+			<% end %>
+          </ul>
+        </nav>
+      </header>

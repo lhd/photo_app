@@ -1,0 +1,24 @@
+<% form_for @image, :html => { :multipart => true } do |f| %>
+  <%= f.error_messages %>
+  <fieldset>
+    <legend>Image</legend>
+    <p>
+      <%= image_tag(@image.file_url(:thumb)) if @image.file? %>
+      <% unless @image.new_record? %>
+        <%= f.check_box :remove_file %>
+        <%= f.label :remove_file, "remove file" %>
+      <% end %>
+    </p>
+    <p>
+      <%= f.label :file, "Upload local file:" %><br />
+      <%= f.file_field :file %>
+      <%= f.hidden_field :file_cache %>
+    </p>
+    <p><em>…or…</em></p>
+    <p>
+      <%= f.label :remote_file_url, "Download remote file:" %><br />
+      <%= f.text_field :remote_file_url %>
+    </p>
+  </fieldset>
+  <p><%= f.submit "Submit" %></p>
+<% end %>

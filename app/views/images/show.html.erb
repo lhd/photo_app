@@ -1,0 +1,114 @@
+<% content_for :head do %>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("#title").live('click', function() {
+      var currenttitle = $.trim($("#title").text());
+      if (currenttitle == '') {
+        currenttitle = $.trim($("#title").val());
+      };
+      $(".imagetitle").html('<form id="titleform" accept-charset="UTF-8" action="" method="post">' + 
+        '<div style="margin:0;padding:0;display:inline"> <input name="utf8" type="hidden" value="&#x2713;" /><input name="_method" type="hidden" value="put" /><input name="authenticity_token" type="hidden" value="7/6YVMboanOzZz9il1DsShcyqnQj7qYxM4HY+R2lEcg=" /></div>' +
+        '<input id="titlecontent" name="title" type="text" size="40" maxlength="60" value="' + currenttitle + '">' +
+        '<input type="submit" value="Save">' +
+        '</form>');
+     });
+      $("#titleform").live('submit', function(event) {	    event.preventDefault();
+        $.post("<%= image_url(@image.id) %>", $("#titleform").serialize());
+        $(".imagetitle").html('<div id="title">' + $('#titlecontent').val()  + '</div>');
+      });
+  });
+</script>
+<% end %>
+
+<div class="imagetitle">
+  <div id="title">
+    <%= @image.title %> 
+  </div>
+</div>
+<div class="titlehelp">
+  (click on the title to edit)
+</div>
+<%= image_tag(@image.file_url, :class => "showimg") if @image.file? %>
+
+<div class="leftimageaddons">
+
+<% @comments.each do |comment| %>
+	<div class="commentator">
+
+		<%= link_to "#{comment.user.name}", user_path(comment.user) %>
+	</div>
+	<div class="commentdate">	
+		said on
+		<%= comment.created_at %>
+		:
+	</div>
+	<div class="comment">
+
+		<%= comment.text %>
+		
+	</div>
+	<div class="commentactions">
+		<% if current_user == comment.user %>
+			<%= link_to 'Delete Comment', comment, :confirm => 'Are you sure you want to delete this comment?', :method => :delete %>
+		<% end %>
+	</div>
+
+<% end %>
+ 
+<br />
+
+<%= form_for @comment, :url => "/comments", :html => {:class => "newcomment"} do |f| %>
+	<%= render 'shared/error_messages', :object => f.object %>
+	<%= f.text_field :text %>
+	<%= hidden_field_tag(:image_id, @image.id) %>
+	<%= f.submit "Add Comment" %>
+<% end %>
+ 
+</div>
+
+<% if @owner %>
+<div class="rightimageaddons">
+	<div style="font-weight:bold;font-size:120%;"> Access Rights </div>
+
+		<%= form_for @share, :url => "/shares" do |f| %>
+			<%= render 'shared/error_messages', :object => f.object %>
+			<%=  select_tag 'user_id', options_from_collection_for_select(@users, 'id', 'email') %>
+			<%= hidden_field_tag(:image_id, @image.id) %>
+			<%= f.submit "Grant Access" %>
+		<% end %>
+	<br />
+	<%= form_for @image, :url => "/images/#{@image.id}/access" do |f| %>
+		<span>Who should be able to view this image?</span> <br />
+	    <input type="radio" name="access" value="private" <% if @image.private %> checked="checked" <% end %>> Private (nobody else but you) <br />
+	    <input type="radio" name="access" value="selected" <% if @image.selected %> checked="checked" <% end %>> Only selected users <br />
+	    <input type="radio" name="access" value="friends" <% if @image.friends %> checked="checked" <% end %>> Friends (and selected users) <br />
+<!-- deactivated, moving to separate page...    <input type="radio" name="access" value="global_access" <% if @image.global_access %> checked="checked" <% end %>> Global (everyone) <br /> -->
+		<%= f.submit "Save restrictions" %>
+	<% end %>
+
+	<br />
+	<ul style="list-style-type: none;">		
+		<li>
+			<%= link_to 'Details', share_path(@image) %>
+		</li>
+	</ul>
+</div>
+<% end %>
+ 
+<br />
+
+<div class="actionlinks">
+	<ul>
+		<li>
+			<%= link_to 'Back', :back %>
+		</li>
+		<li>
+			<%= link_to 'Back to Images', images_path %>
+		</li>
+<% if @owner %>
+		<li>
+			<%= link_to 'Delete Image', @image, :confirm => 'Are you sure you want to delete this image?', :method => :delete %>
+		</li>	
+<% end %>	
+	</ul>
+</div>

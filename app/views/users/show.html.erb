@@ -1,0 +1,16 @@
+<table class="profile" summary="Profile information">
+  <tr>
+    <td class="main">
+        <%= @user.name %>, </br>
+		<%= @user.email %>, </br>
+		<%= @user.password %> </br>
+    </td>
+    <td class="sidebar round">
+      <strong>Name</strong> <%= @user.name %><br />
+      <strong>URL</strong>  <%= link_to user_path(@user), @user %>
+    </td>
+  </tr>
+</table>
+
+<%= link_to 'Edit', edit_user_path(@user) %> |
+<%= link_to 'Back', :back %>

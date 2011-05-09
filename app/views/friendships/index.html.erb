@@ -1,0 +1,26 @@
+<h1>Friends</h1>
+
+<% if @friends.size > 0 %>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @friends.each do |user| %>
+  <tr>
+    <td><%= user.name %></td>
+    <td><%= user.email %></td>
+    <td><%= link_to 'Show', user %></td>
+    <td><%= link_to 'Remove', friendship_path(user), :method => :delete, :confirm => 'Are you sure you want to remove this friend?' %></td>
+  </tr>
+<% end %>
+
+</table>
+
+<% else %>
+	You don't have any friends yet. You can search for other users and add them.
+<% end %>

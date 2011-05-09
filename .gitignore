@@ -1,0 +1,14 @@
+.bundle
+db/*.sqlite3
+log/*.log
+tmp/
+/development
+Gemfile
+Gemfile.lock
+Gemfile.local
+*.old
+config/database.yml
+db/schema.rb
+public/file_uploads/
+upgrade.sh
+

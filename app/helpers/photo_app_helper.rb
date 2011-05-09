@@ -1,0 +1,2 @@
+module PhotoAppHelper
+end
